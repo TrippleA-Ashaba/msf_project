@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 <!--  -->
+{% load crispy_forms_tags %}
+<!--  -->
 {% block title %} Sign Up {% endblock %}
 <!--  -->
 {% block content %}
@@ -7,7 +9,7 @@
 <form action="{% url 'signup' %}" method="post">
 	{% csrf_token %}
 	<!--  -->
-	{{ form }} <button>Signup</button>
+	{{ form|crispy }} <button>Signup</button>
 </form>
 
 {% endblock %}
