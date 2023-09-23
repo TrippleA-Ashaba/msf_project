@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # Third party libraries
     "crispy_forms",
     "crispy_bootstrap5",
+    "rest_framework",
+    "rest_framework.authtoken",
     # Local apps
     "apps.accounts",
     "apps.core",
