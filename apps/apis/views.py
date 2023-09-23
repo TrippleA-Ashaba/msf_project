@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 
 User = get_user_model()
@@ -29,7 +31,16 @@ class LoginAPIView(APIView):
         user = authenticate(request, username=email, password=password)
 
         if user is not None:
-            return Response({"message": "Login successful!"}, status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+
+            return Response(
+                {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "message": "Login successful!",
+                },
+                status=status.HTTP_200_OK,
+            )
         else:
             return Response(
                 {"message": "Invalid email or password"},
