@@ -33,7 +33,7 @@ class LoginAPIView(APIView):
         if user is not None:
             refresh = RefreshToken.for_user(user)
 
-            return Response(
+            response = Response(
                 {
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
@@ -41,8 +41,23 @@ class LoginAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
+            response.set_cookie(
+                "access_token", str(refresh.access_token), httponly=True
+            )
+            return response
         else:
             return Response(
                 {"message": "Invalid email or password"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+
+class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        response = Response(
+            {"message": "Logout successful!"}, status=status.HTTP_200_OK
+        )
+        response.delete_cookie("access_token")
+        return response
