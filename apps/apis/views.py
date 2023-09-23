@@ -8,6 +8,16 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.hashers import make_password
+
+import secrets
+import string
+
+
+def generate_random_password(length=12):
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(secrets.choice(alphabet) for i in range(length))
+    return password
 
 
 User = get_user_model()
@@ -56,3 +66,54 @@ class LogoutAPIView(APIView):
     def post(self, request):
         request.auth.delete()
         return Response({"message": "Logout successful!"}, status=status.HTTP_200_OK)
+
+
+class PasswordChangeAPIView(APIView):
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+
+        if not user.check_password(current_password):
+            return Response(
+                {"error": "Invalid current password"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        request.auth.delete()
+
+        return Response(
+            {"message": "Password changed successfully"}, status=status.HTTP_200_OK
+        )
+
+
+class ResetPasswordAPIView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+
+        try:
+            user = User.objects.get(email=email)
+            # Generate a random password
+            new_password = generate_random_password()
+
+            # Set the new password for the user
+            user.set_password(new_password)
+            user.save()
+
+            request.auth.delete()
+
+            # Print out the new password (for testing purposes)
+            print(f"New Password for {user.get_full_name()}: {new_password}")
+
+            return Response(
+                {"message": "Password reset successfully"}, status=status.HTTP_200_OK
+            )
+
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User with this email does not exist"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
