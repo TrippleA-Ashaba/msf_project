@@ -1,17 +1,13 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from .serializers import UserSerializer, LoginSerializer
-from rest_framework.response import Response
-from django.contrib.auth import get_user_model, authenticate
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.hashers import make_password
-
 import secrets
 import string
+
+from django.contrib.auth import authenticate, get_user_model
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .serializers import LoginSerializer, UserSerializer
 
 
 def generate_random_password(length=12):
@@ -64,6 +60,7 @@ class LoginAPIView(APIView):
 
 class LogoutAPIView(APIView):
     def post(self, request):
+        # delete token on logout
         request.auth.delete()
         return Response({"message": "Logout successful!"}, status=status.HTTP_200_OK)
 
