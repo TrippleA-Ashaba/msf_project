@@ -24,7 +24,7 @@ User = get_user_model()
 
 
 class SignUpAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -34,7 +34,7 @@ class SignUpAPIView(APIView):
 
 
 class LoginAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -91,6 +91,8 @@ class PasswordChangeAPIView(APIView):
 
 
 class ResetPasswordAPIView(APIView):
+    permission_classes = []
+
     def post(self, request):
         email = request.data.get("email")
 
@@ -103,9 +105,14 @@ class ResetPasswordAPIView(APIView):
             user.set_password(new_password)
             user.save()
 
-            request.auth.delete()
+            # delete old token
+            try:
+                old_token = Token.objects.get(user=user)
+                old_token.delete()
+            except Token.DoesNotExist:
+                pass
 
-            # Print out the new password (for testing purposes)
+            # Print out the new password
             print(f"New Password for {user.get_full_name()}: {new_password}")
 
             return Response(
