@@ -45,7 +45,7 @@ class LoginAPIView(APIView):
 
         user = authenticate(request, username=email, password=password)
 
-        if user is not None:
+        if user:
             token, created = Token.objects.get_or_create(user=user)
 
             return Response(
