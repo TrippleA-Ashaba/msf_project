@@ -10,7 +10,7 @@ def home(request):
 
 @login_required
 def index(request):
-    todos = Todo.objects.all()
+    todos = Todo.objects.all().order_by("-created_at")
     context = {
         "todos": todos,
     }
@@ -44,4 +44,18 @@ def edit_todo(request, id):
         if title and title != todo.title:
             todo.title = title
             todo.save()
-            return redirect("index")
+        return redirect("index")
+    context = {"todo": todo}
+    return render(request, "todo/edit_todo.html", context)
+
+
+def complete_todo(request, id):
+    todo = get_object_or_404(Todo, id=id)
+    if request.method == "POST":
+        if todo.completed:
+            todo.completed = False
+            todo.save()
+        else:
+            todo.completed = True
+            todo.save()
+    return redirect("index")

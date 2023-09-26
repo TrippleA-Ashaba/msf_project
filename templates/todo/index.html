@@ -10,7 +10,11 @@
 				<div class="card-body">
 					<div>
 						<div class="">
-							<form class="d-flex gap-2" method="post" action="{% url 'add_todo' %}">
+							<form
+								hx-boost="true"
+								class="d-flex gap-2"
+								method="post"
+								action="{% url 'add_todo' %}">
 								{% csrf_token %}
 								<input
 									class="form-control"
@@ -23,18 +27,39 @@
 						</div>
 						<div id="todos">
 							{% for todo in todos %}
-							<div class="mt-4 card bg-light p-2" id="todo-{{todo.id}}">
+							<div
+								class="mt-4 card p-2 {% if todo.completed %} bg-secondary-subtle {% else %} bg-light {% endif %}"
+								id="todo-{{todo.id}}">
 								<div
 									class="form-check d-flex justify-content-between align-items-center">
 									<div>
-										<input class="form-check-input" type="checkbox" />
 										<div
 											class="mx-3 {% if todo.completed %} text-decoration-line-through {% endif %}">
 											{{ todo }}
 										</div>
 									</div>
 									<div>
-										<button class="btn btn-sm btn-outline-primary">Edit</button>
+										{% if todo.completed %}
+										<button
+											class="btn btn-sm btn-outline-success"
+											hx-post="{% url 'complete_todo' todo.id %}"
+											hx-target="#main">
+											Undo
+										</button>
+										{% else %}
+										<button
+											class="btn btn-sm btn-success"
+											hx-post="{% url 'complete_todo' todo.id %}"
+											hx-target="#main">
+											Done
+										</button>
+										{% endif %}
+										<button
+											class="btn btn-sm btn-outline-primary"
+											hx-get="{% url 'edit_todo' todo.id %}"
+											hx-target="#todo-{{todo.id}}">
+											Edit
+										</button>
 										<button
 											class="btn btn-sm btn-danger"
 											hx-delete="{% url 'delete_todo' todo.id %}"
@@ -52,7 +77,7 @@
 				</div>
 			</div>
 		</div>
-		+
+
 		<div class="col"></div>
 	</div>
 </div>
