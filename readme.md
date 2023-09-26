@@ -1,7 +1,10 @@
 # MSF Test Project
 
-![Logo](https://github.com/TrippleA-Ashaba/msf_project/assets/102288573/4c2573ba-2bb1-4e5c-a323-b2e91f726d44)
+![Static Badge](https://img.shields.io/badge/Test-passed-green)
 
+![Static Badge](https://img.shields.io/badge/Coverage-79%25-blue)
+
+![Logo](https://github.com/TrippleA-Ashaba/msf_project/assets/102288573/4c2573ba-2bb1-4e5c-a323-b2e91f726d44)
 
 A frontend and a Backend API
 
@@ -12,7 +15,6 @@ A frontend and a Backend API
 2. Spectacular Documentation http://127.0.0.1:8000/api/docs/
 
 ![spectacular](https://github.com/TrippleA-Ashaba/msf_project/assets/102288573/d0996a73-5668-4d00-8311-35769d3c6765)
-
 
 _Note:_ Your local server must be running to use the **spectacular** docs.
 
