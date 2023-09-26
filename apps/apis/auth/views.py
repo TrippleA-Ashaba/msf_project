@@ -7,11 +7,17 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import LoginSerializer, UserSerializer
+from .serializers import (
+    LoginSerializer,
+    LogoutSerializer,
+    PasswordChangeSerializer,
+    ResetPasswordSerializer,
+    UserSerializer,
+)
 
 
 def generate_random_password(length=12):
-    alphabet = string.ascii_letters + string.digits + string.punctuation
+    alphabet = string.ascii_letters + string.digits
     password = "".join(secrets.choice(alphabet) for i in range(length))
     return password
 
@@ -21,6 +27,7 @@ User = get_user_model()
 
 class SignUpAPIView(APIView):
     permission_classes = []
+    serializer_class = UserSerializer
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -31,6 +38,7 @@ class SignUpAPIView(APIView):
 
 class LoginAPIView(APIView):
     permission_classes = []
+    serializer_class = LoginSerializer
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -59,6 +67,8 @@ class LoginAPIView(APIView):
 
 
 class LogoutAPIView(APIView):
+    serializer_class = LogoutSerializer
+
     def post(self, request):
         # delete token on logout
         request.auth.delete()
@@ -66,6 +76,8 @@ class LogoutAPIView(APIView):
 
 
 class PasswordChangeAPIView(APIView):
+    serializer_class = PasswordChangeSerializer
+
     def post(self, request):
         user = request.user
         current_password = request.data.get("current_password")
@@ -89,6 +101,7 @@ class PasswordChangeAPIView(APIView):
 
 class ResetPasswordAPIView(APIView):
     permission_classes = []
+    serializer_class = ResetPasswordSerializer
 
     def post(self, request):
         email = request.data.get("email")
@@ -110,7 +123,13 @@ class ResetPasswordAPIView(APIView):
                 pass
 
             # Print out the new password
+            print("=" * 60)
+            print("*" * 60)
+            print()
             print(f"New Password for {user.get_full_name()}: {new_password}")
+            print()
+            print("*" * 60)
+            print("=" * 60)
 
             return Response(
                 {"message": "Password reset successfully"}, status=status.HTTP_200_OK

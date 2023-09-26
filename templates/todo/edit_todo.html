@@ -1,0 +1,13 @@
+<form action="{% url 'edit_todo' todo.id %}" class="d-flex gap-2" method="post" hx-boost="true">
+	{% csrf_token %}
+	<input class="form-control" type="text" name="title" value="{{todo.title}}" />
+	<button
+		class="btn btn-sm btn-secondary"
+		hx-get="{% url 'index' %}"
+		hx-target="#main"
+		type="button"
+		hx-swap="outerHTML">
+		Cancel
+	</button>
+	<button class="btn btn-sm btn-success" type="submit">Save</button>
+</form>

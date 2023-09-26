@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "rest_framework",
     "rest_framework.authtoken",
+    "drf_spectacular",
+    "corsheaders",
+    "django_htmx",
     # Local apps
     "apps.accounts",
     "apps.todo",
@@ -55,11 +58,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -130,6 +135,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -148,4 +155,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "MSF Todo Project API",
+    "DESCRIPTION": "MSF Assignment",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+
+CORS_ALLOW_ALL_ORIGINS = True
