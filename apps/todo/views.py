@@ -10,13 +10,14 @@ def home(request):
 
 @login_required
 def index(request):
-    todos = Todo.objects.all().order_by("-created_at")
+    todos = Todo.objects.filter(created_by=request.user).order_by("-created_at")
     context = {
         "todos": todos,
     }
     return render(request, "todo/index.html", context)
 
 
+@login_required
 def add_todo(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -27,9 +28,9 @@ def add_todo(request):
             return redirect("index")
 
 
+@login_required
 def delete_todo(request, id):
-    todo = get_object_or_404(Todo, id=id)
-    print("Here")
+    todo = get_object_or_404(Todo, id=id, created_by=request.user)
     if request.method == "DELETE":
         todo = get_object_or_404(Todo, id=id)
         todo.delete()
@@ -37,8 +38,9 @@ def delete_todo(request, id):
     return HttpResponse(status=500)
 
 
+@login_required
 def edit_todo(request, id):
-    todo = get_object_or_404(Todo, id=id)
+    todo = get_object_or_404(Todo, id=id, created_by=request.user)
     if request.method == "POST":
         title = request.POST.get("title")
         if title and title != todo.title:
@@ -49,13 +51,14 @@ def edit_todo(request, id):
     return render(request, "todo/edit_todo.html", context)
 
 
+@login_required
 def complete_todo(request, id):
-    todo = get_object_or_404(Todo, id=id)
+    todo = get_object_or_404(Todo, id=id, created_by=request.user)
     if request.method == "POST":
-        if todo.completed:
-            todo.completed = False
-            todo.save()
-        else:
+        if not todo.completed:
             todo.completed = True
             todo.save()
-    return redirect("index")
+        else:
+            todo.completed = False
+            todo.save()
+        return redirect("index")
