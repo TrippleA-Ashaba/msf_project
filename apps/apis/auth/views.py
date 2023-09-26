@@ -17,7 +17,7 @@ from .serializers import (
 
 
 def generate_random_password(length=12):
-    alphabet = string.ascii_letters + string.digits + string.punctuation
+    alphabet = string.ascii_letters + string.digits
     password = "".join(secrets.choice(alphabet) for i in range(length))
     return password
 
@@ -123,7 +123,13 @@ class ResetPasswordAPIView(APIView):
                 pass
 
             # Print out the new password
+            print("=" * 60)
+            print("*" * 60)
+            print()
             print(f"New Password for {user.get_full_name()}: {new_password}")
+            print()
+            print("*" * 60)
+            print("=" * 60)
 
             return Response(
                 {"message": "Password reset successfully"}, status=status.HTTP_200_OK

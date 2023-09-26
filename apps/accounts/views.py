@@ -9,7 +9,7 @@ from .forms import LoginForm, SignUpForm
 class SignUpView(CreateView):
     template_name = "accounts/signup.html"
     form_class = SignUpForm
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("index")
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -29,7 +29,7 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect("home")
+            return redirect("index")
     else:
         form = LoginForm()
     return render(request, "accounts/login.html", {"form": form})
