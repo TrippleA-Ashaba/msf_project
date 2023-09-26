@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+<!--  -->
+{% block content %}
+<div class="container mt-5">
+	<div class="row">
+		<div class="col"></div>
+		<div class="col-12 col-lg-8">
+			<div class="card">
+				<h1 class="text-center">TODO List</h1>
+				<div class="card-body">
+					<div>
+						<div class="">
+							<form class="d-flex gap-2" method="post" action="{% url 'add_todo' %}">
+								{% csrf_token %}
+								<input
+									class="form-control"
+									type="text"
+									name="title"
+									placeholder="Enter todo item" />
+
+								<button class="btn btn-sm btn-primary" type="submit">Add</button>
+							</form>
+						</div>
+						<div id="todos">
+							{% for todo in todos %}
+							<div class="mt-4 card bg-light p-2" id="todo-{{todo.id}}">
+								<div
+									class="form-check d-flex justify-content-between align-items-center">
+									<div>
+										<input class="form-check-input" type="checkbox" />
+										<div
+											class="mx-3 {% if todo.completed %} text-decoration-line-through {% endif %}">
+											{{ todo }}
+										</div>
+									</div>
+									<div>
+										<button class="btn btn-sm btn-outline-primary">Edit</button>
+										<button
+											class="btn btn-sm btn-danger"
+											hx-delete="{% url 'delete_todo' todo.id %}"
+											hx-target="#todo-{{todo.id}}"
+											hx-swap="outerHTML swap:0.5s"
+											hx-confirm="Are you sure?">
+											Delete
+										</button>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		+
+		<div class="col"></div>
+	</div>
+</div>
+
+{% endblock %}

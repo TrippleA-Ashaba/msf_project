@@ -14,9 +14,10 @@
 			<div class="card">
 				<h1 class="text-center">TODO List</h1>
 				<div class="card-body">
-					<div x-data="{ todos:[], newTodo:'' }" x-init="todos = await (getTodos())">
+					<div x-data="{ todos:[], newTodo:'' }" x-init="todos = await (fetchTodos())">
 						<div class="">
-							<form class="d-flex gap-2" x-on:submit.prevent="createTodo">
+							<form class="d-flex gap-2" x-on:submit.prevent id="add-form">
+								{% csrf_token %}
 								<input
 									class="form-control"
 									type="text"
@@ -26,14 +27,13 @@
 
 								<button
 									class="btn btn-sm btn-primary"
-									@click="todos.push({title:newTodo,completed:true})">
+									@click="todos.push({title:newTodo}),createTodo()">
 									Add
 								</button>
 							</form>
 						</div>
-						<p x-text="newTodo"></p>
 
-						<template x-for="todo in todos">
+						<template x-for="todo in todos" :key="todo.id">
 							<div class="mt-4 card bg-light p-2">
 								<div
 									class="form-check d-flex justify-content-between align-items-center">

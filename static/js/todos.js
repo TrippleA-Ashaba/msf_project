@@ -1,4 +1,6 @@
-function getTodos() {
+const base_url = "http://127.0.0.1:8000/";
+
+function fetchTodos() {
 	return fetch("http://localhost:8000/todos/")
 		.then((response) => response.json())
 		.then((data) => data)
@@ -6,12 +8,16 @@ function getTodos() {
 }
 
 function createTodo(title) {
+	const csrftoken = document.querySelector("#add-form > input").value;
+	console.log(csrftoken);
+
 	return fetch("http://localhost:8000/todos/", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
+			"X-CSRFToken": csrftoken,
 		},
-		body: JSON.stringify({ title }),
+		body: JSON.stringify({ title, completed: false }),
 	})
 		.then((response) => response.json())
 		.then((data) => data)
