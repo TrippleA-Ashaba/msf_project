@@ -1,11 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Todo
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
-
-def home(request):
-    return render(request, "todo/home.html")
+from .models import Todo
 
 
 @login_required

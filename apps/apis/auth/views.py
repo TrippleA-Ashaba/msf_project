@@ -9,10 +9,10 @@ from rest_framework.views import APIView
 
 from .serializers import (
     LoginSerializer,
-    UserSerializer,
     LogoutSerializer,
-    ResetPasswordSerializer,
     PasswordChangeSerializer,
+    ResetPasswordSerializer,
+    UserSerializer,
 )
 
 

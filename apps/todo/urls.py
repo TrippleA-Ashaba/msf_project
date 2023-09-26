@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import home, index, add_todo, delete_todo, edit_todo, complete_todo
+from .views import add_todo, complete_todo, delete_todo, edit_todo, index
 
 urlpatterns = [
     path("", index, name="index"),
