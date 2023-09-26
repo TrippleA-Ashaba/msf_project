@@ -1,8 +1,6 @@
 # MSF Test Project
 
-![Static Badge](https://img.shields.io/badge/Test-passed-green)
-
-![Static Badge](https://img.shields.io/badge/Coverage-79%25-blue)
+![Static Badge](https://img.shields.io/badge/Test-passed-green) ![Static Badge](https://img.shields.io/badge/Coverage-79%25-blue)
 
 ![Logo](https://github.com/TrippleA-Ashaba/msf_project/assets/102288573/4c2573ba-2bb1-4e5c-a323-b2e91f726d44)
 
